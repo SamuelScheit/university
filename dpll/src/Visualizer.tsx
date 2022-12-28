@@ -26,7 +26,9 @@ export const ASTNode: React.FC<ASTNodeProps> = ({ node }) => {
 
 	return (
 		<div className="ast-node">
-			<div className="content">{content}</div>
+			<div className="content" style={{ background: node.active ? "#0052a5" : "" }}>
+				{content}
+			</div>
 			{children.length > 0 && <div className="children">{children}</div>}
 		</div>
 	);

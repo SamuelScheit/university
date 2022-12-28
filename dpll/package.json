@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "mathlive": "^0.86.0",
+    "missing-native-js-functions": "^1.2.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.57.1"

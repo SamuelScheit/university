@@ -657,6 +657,11 @@ mathlive@^0.86.0:
   resolved "https://registry.yarnpkg.com/mathlive/-/mathlive-0.86.0.tgz#cd72beaf5d1e164b1e6ebf22c97bfca0f925d8a0"
   integrity sha512-gChz82gnK0mVbTkmuomwAFSPZTERicBw7hi60J1XqYhbYL+qvUzRw6gBEAIxMOs7pL+6EXPJI7J+QWni/i05lQ==
 
+missing-native-js-functions@^1.2.18:
+  version "1.2.18"
+  resolved "https://registry.yarnpkg.com/missing-native-js-functions/-/missing-native-js-functions-1.2.18.tgz#f568d5afcce43908c5e020a3e5b0da3f349cd043"
+  integrity sha512-TZr1muzDE4kfu0LHDzg63O7m2qW3Gpyc875ki8+YlSRj+4ibZRv0ySQ0cSB06GoBL9ejeehLmkQnybLpp9jYcg==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"

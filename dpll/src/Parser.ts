@@ -1,33 +1,51 @@
 export type AST = BinaryExpression | UnaryExpression | Symbol;
 
-interface BinaryExpression {
-	type: "BinaryExpression";
+export interface BinaryExpression {
+	type: typeof BINARY;
 	operator: string;
 	left: AST;
 	right: AST;
+	active?: boolean;
 }
 
-interface UnaryExpression {
-	type: "UnaryExpression";
+export interface UnaryExpression {
+	type: typeof UNARY;
 	operator: string;
 	right: AST;
+	active?: boolean;
 }
 
-interface Symbol {
-	type: "Symbol";
+export interface Symbol {
+	type: typeof SYMBOL;
 	name: string;
+	active?: boolean;
 }
+
+export const TRUE = "⊤";
+export const FALSE = "⊥";
+export const AND = "∧";
+export const OR = "∨";
+export const NOT = "¬";
+export const IMPLIES = "→";
+export const IFF = "↔";
+export const XOR = "⊕";
+export const SYMBOL = "Symbol";
+export const BINARY = "BinaryExpression";
+export const UNARY = "UnaryExpression";
+
+export const TrueSymbol = { type: SYMBOL, name: TRUE, active: true } as Symbol;
+export const FalseSymbol = { type: SYMBOL, name: FALSE, active: true } as Symbol;
 
 export class Parser {
 	input!: string;
 	pos!: number;
 	operators = [
-		{ name: "¬", precedence: 1, kind: "unary" },
-		{ name: "∧", precedence: 1, kind: "binary" },
-		{ name: "∨", precedence: 1, kind: "binary" },
-		{ name: "→", precedence: 1, kind: "binary" },
-		{ name: "↔", precedence: 1, kind: "binary" },
-		{ name: "⊕", precedence: 1, kind: "binary" },
+		{ name: NOT, precedence: 0, kind: "unary" },
+		{ name: AND, precedence: 1, kind: "binary" },
+		{ name: OR, precedence: 1, kind: "binary" },
+		{ name: IMPLIES, precedence: 1, kind: "binary" },
+		{ name: IFF, precedence: 1, kind: "binary" },
+		{ name: XOR, precedence: 1, kind: "binary" },
 	];
 
 	parse(input: string): AST {
@@ -81,7 +99,7 @@ export class Parser {
 		let symbol = "";
 		while (this.pos < this.input.length) {
 			const nextChar = this.input[this.pos];
-			if (!/[a-zA-Z0-9$]/.test(nextChar)) {
+			if (!/[a-zA-Z0-9⊤⊥$]/.test(nextChar)) {
 				// allow any alphanumeric characters as symbol characters
 				break;
 			}
