@@ -2,17 +2,11 @@ import React, { Component, DOMAttributes, useEffect, useRef } from "react";
 import "./App.scss";
 import "mathlive";
 import { MathfieldElement, MathfieldOptions } from "mathlive";
-import { AST, Parser } from "./Parser";
-import { ASTNode } from "./Visualizer";
-import { transform } from "./Transformer";
-
-declare global {
-	namespace JSX {
-		interface IntrinsicElements {
-			"math-field": React.DetailedHTMLProps<any, MathfieldElement>;
-		}
-	}
-}
+import { AND, AST, FALSE, IFF, IMPLIES, NOT, OR, Parser, TRUE } from "../Parser";
+import { ASTNode } from "./Node";
+import { transform } from "../Transformer";
+import "../Evalutator";
+import { TruthTable } from "./TruthTable";
 
 const parser = new Parser();
 
@@ -25,7 +19,7 @@ export class App extends Component {
 	state = {
 		ast: null as any,
 		error: null as Error | null,
-		value: "",
+		value: "((p ∨ q) ∧ (¬p ∨ r) ∧ (s ∨ ¬s)) → (q ∨ r)",
 	};
 	history!: AST[];
 	index!: number;
@@ -44,6 +38,7 @@ export class App extends Component {
 				this.previous();
 			}
 		});
+		this.onChange({ target: { value: this.state.value } } as any);
 	}
 
 	onChange = (e: any) => {
@@ -53,13 +48,13 @@ export class App extends Component {
 				.replace(/(XNOR)/gi, "⊻")
 				.replace(/(NOR)/gi, "⊽")
 				.replace(/(NAND)/gi, "⊼")
-				.replace(/[⋅*]|(AND)/gi, "∧")
-				.replace(/[+]|(OR)/gi, "∨")
-				.replace(/(<->)(IFF)/gi, "↔")
-				.replace(/(->)|(IMPLIES)/gi, "→")
-				.replace(/(TRUE)/gi, "⊤")
-				.replace(/(FALSE)/gi, "⊥")
-				.replace(/[!]|(NOT)/gi, "¬");
+				.replace(/[⋅*]|(AND)/gi, AND)
+				.replace(/[+]|(OR)/gi, OR)
+				.replace(/(<->)(IFF)/gi, IFF)
+				.replace(/(->)|(IMPLIES)/gi, IMPLIES)
+				.replace(/(TRUE)/gi, TRUE)
+				.replace(/(FALSE)/gi, FALSE)
+				.replace(/[!]|(NOT)/gi, NOT);
 
 			this.setState({ value });
 
@@ -120,23 +115,27 @@ export class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<input
-					onBlur={() => (this.focused = false)}
-					onFocus={() => (this.focused = true)}
-					type="text"
-					onChange={this.onChange}
-					value={this.state.value}
-				/>
+				<div className="container">
+					<input
+						onBlur={() => (this.focused = false)}
+						onFocus={() => (this.focused = true)}
+						type="text"
+						onChange={this.onChange}
+						value={this.state.value}
+					/>
 
-				<div style={{ display: "flex", gap: "0.2rem" }}>
-					<button onClick={this.previous}>&lt;</button>
-					<button onClick={this.next}>&gt;</button>
-					<button onClick={this.skip}>Skip</button>
+					<div style={{ display: "flex", gap: "0.2rem" }}>
+						<button onClick={this.previous}>&lt;</button>
+						<button onClick={this.next}>&gt;</button>
+						<button onClick={this.skip}>Skip</button>
+					</div>
 				</div>
-
-				<div style={{ marginTop: "1rem", overflow: "scroll" }}>
+				<div style={{ marginTop: "1rem", overflow: "scroll", marginBottom: "3rem" }}>
 					{this.state.ast && <ASTNode node={this.state.ast} />}
 					{this.state.error && <div>{this.state.error.message}</div>}
+				</div>
+				<div className="container">
+					<TruthTable ast={this.state.ast} />
 				</div>
 			</div>
 		);

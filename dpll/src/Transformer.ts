@@ -6,10 +6,11 @@ import {
 	isLeftNegatedLeft,
 	isDistributive,
 	applyDistributive,
-	isLeftRepetition,
+	isAbsorption,
 	isEqual,
 	deleteActive,
 	markActive,
+	markRecursiveActive,
 } from "./TransformerHelper";
 
 function* transformOR(left: AST, right: AST) {
@@ -26,9 +27,13 @@ function* transformOR(left: AST, right: AST) {
 	// A ∨ ¬A = true (trivial tautology)
 	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left)) return TrueSymbol;
 
-	// A ∨ (A ∨ ?) = A
-	if (isLeftRepetition(left, right, OR)) return left;
-	if (isLeftRepetition(right, left, OR)) return right;
+	// A ∨ (A ∨ ?) = A (idempotence)
+	if (isAbsorption(left, right, OR)) return left;
+	if (isAbsorption(right, left, OR)) return right;
+
+	// A ∨ (A ∧ B) = A (absorption)
+	if (isAbsorption(left, right, AND)) return left;
+	if (isAbsorption(right, left, AND)) return right;
 
 	// A ∨ (B ∧ C) = (A ∨ B) ∧ (A ∨ C)
 	if (isDistributive(left, right, AND)) return applyDistributive(right, left, OR);
@@ -47,8 +52,12 @@ function* transformAND(left: AST, right: AST) {
 	if (isTrue(right)) return left;
 
 	// A ∧ (A ∧ ?) = A ∧ ?
-	if (isLeftRepetition(left, right, AND)) return right;
-	if (isLeftRepetition(right, left, AND)) return left;
+	if (isAbsorption(left, right, AND)) return right;
+	if (isAbsorption(right, left, AND)) return left;
+
+	// A ∨ (A ∧ B) = A (absorption)
+	if (isAbsorption(left, right, OR)) return left;
+	if (isAbsorption(right, left, OR)) return right;
 
 	// A ∧ ¬A = false (trivial contradiction)
 	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left)) return FalseSymbol;
@@ -84,7 +93,8 @@ function* transformIMPLIES(left: AST, right: AST) {
 		left: {
 			type: UNARY,
 			operator: NOT,
-			right: left,
+			active: true,
+			right: { ...left, active: true },
 		},
 		right,
 	} as AST;
@@ -143,7 +153,6 @@ function* transformXOR(left: AST, right: AST) {
 			left: {
 				type: UNARY,
 				operator: NOT,
-				active: true,
 				right: left,
 			},
 			right: right,
@@ -155,7 +164,6 @@ function* transformXOR(left: AST, right: AST) {
 			right: {
 				type: UNARY,
 				operator: NOT,
-				active: true,
 				right: { ...right },
 			},
 		},
@@ -262,11 +270,10 @@ export function* transform(ast: AST, root: AST = undefined as unknown as AST): G
 			console.log("root === ast");
 			markActive(ast);
 			yield ast;
-			// deleteActive(result);
+			deleteActive(result);
+		} else {
+			result.active = true;
 		}
-		// const r = yield* transform(result, newRoot);
-		console.log("new result", ast, result, root === ast);
-		result.active = true;
 		return result;
 	}
 

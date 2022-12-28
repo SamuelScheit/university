@@ -38,6 +38,8 @@ export function markRecursiveActive(ast: AST) {
 	} else if (ast.type === UNARY) {
 		markRecursiveActive(ast.right);
 	}
+
+	return ast;
 }
 
 export function isEqual(left: AST, right: AST): boolean {
@@ -52,31 +54,30 @@ export function isEqual(left: AST, right: AST): boolean {
 
 export function isLeftNegatedLeft(left: AST, right: AST) {
 	// A ? ¬A
-	const result =
+	return (
 		left.type === SYMBOL &&
 		right.type === UNARY &&
 		right.operator === NOT &&
 		right.right.type === SYMBOL &&
-		right.right.name === left.name;
-
-	if (result) markActive(right);
-
-	return result;
+		right.right.name === left.name &&
+		markActive(right)
+	);
 }
 
-export function isLeftRepetition(left: AST, right: AST, operator: typeof AND | typeof OR) {
-	// A ∧ (A ∧ ?)
+export function isAbsorption(left: AST, right: AST, operator: typeof AND | typeof OR) {
+	// A ? (A operator ?)
 	return (
 		left.type === SYMBOL &&
 		right.type === BINARY &&
 		right.operator === operator &&
-		(isEqual(right.left, left) || isEqual(right.right, left))
+		(isEqual(right.left, left) || isEqual(right.right, left)) &&
+		markActive(right)
 	);
 }
 
 export function isDistributive(left: AST, right: AST, operator: typeof AND | typeof OR) {
 	return (
-		left.type === "Symbol" && right.type === BINARY && right.operator === operator
+		left.type !== BINARY && right.type === BINARY && right.operator === operator
 		// right.right.type === "Symbol"
 		// right.left.type === "Symbol"
 	);

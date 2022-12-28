@@ -66,3 +66,12 @@ button:focus-visible {
 		color: #fff;
 	}
 }
+
+.container {
+	max-width: 900px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	width: 100%;
+}

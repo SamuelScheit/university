@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
-import { AST } from "./Parser";
-import "./Visualizer.scss";
+import { AST } from "../Parser";
+import "./Node.scss";
 
 interface ASTNodeProps {
 	node: AST;
@@ -26,7 +26,7 @@ export const ASTNode: React.FC<ASTNodeProps> = ({ node }) => {
 
 	return (
 		<div className="ast-node">
-			<div className="content" style={{ background: node.active ? "#0052a5" : "" }}>
+			<div className="content" style={{ background: node.active ? "#00a349" : "" }}>
 				{content}
 			</div>
 			{children.length > 0 && <div className="children">{children}</div>}
