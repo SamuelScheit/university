@@ -1,12 +1,12 @@
-import React, { Component, DOMAttributes, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import "./App.scss";
 import "mathlive";
-import { MathfieldElement, MathfieldOptions } from "mathlive";
 import { AND, AST, FALSE, IFF, IMPLIES, NOT, OR, Parser, TRUE } from "../Parser";
 import { ASTNode } from "./Node";
 import { transform } from "../Transformer";
-import "../Evalutator";
+import "../Evaluator";
 import { TruthTable } from "./TruthTable";
+import { KVDiagram } from "./KVDiagram";
 
 const parser = new Parser();
 
@@ -19,7 +19,7 @@ export class App extends Component {
 	state = {
 		ast: null as any,
 		error: null as Error | null,
-		value: "((p ∨ q) ∧ (¬p ∨ r) ∧ (s ∨ ¬s)) → (q ∨ r)",
+		value: "(((¬q∧¬t)∨(p∨t))∨(q∧((¬t∨p)∧(¬p∨t))))∨(((q∨t)∧(¬p∧¬t))∧(¬q∨((t∧¬p)∨(p∧¬t))))",
 	};
 	history!: AST[];
 	index!: number;
@@ -27,8 +27,6 @@ export class App extends Component {
 	focused = false;
 
 	componentDidMount(): void {
-		console.log("mounted");
-
 		window.addEventListener("keydown", (e) => {
 			if (this.focused) return;
 
@@ -81,13 +79,10 @@ export class App extends Component {
 
 		if (next.done) this.iterator = null;
 
-		console.log(this.index + 1, this.history, next.value);
-
 		this.setState({ ast: this.history[++this.index], error: null });
 	};
 
 	next = () => {
-		console.log(this.index + 1, "go next");
 		if (this.index >= this.history.length - 1) return this.simplify();
 
 		this.setState({ ast: this.history[++this.index] });
@@ -95,7 +90,6 @@ export class App extends Component {
 
 	previous = () => {
 		if (this.index <= 0) return;
-		console.log(this.index - 1, "previous");
 
 		this.setState({ ast: this.history[--this.index] });
 	};
@@ -133,6 +127,9 @@ export class App extends Component {
 				<div style={{ marginTop: "1rem", overflow: "scroll", marginBottom: "3rem" }}>
 					{this.state.ast && <ASTNode node={this.state.ast} />}
 					{this.state.error && <div>{this.state.error.message}</div>}
+				</div>
+				<div className="container">
+					<KVDiagram ast={this.state.ast} />
 				</div>
 				<div className="container">
 					<TruthTable ast={this.state.ast} />

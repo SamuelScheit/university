@@ -35,7 +35,7 @@ export function evaluate(ast: AST, variables: Record<string, boolean>): boolean 
 }
 
 export function evaluateAll(ast: AST) {
-	const allVariables = getAllVariables(ast).sort();
+	var allVariables = getAllVariables(ast).sort();
 	// generate truth table
 	const rows = 2 ** allVariables.length;
 	const values: { variables: Record<string, boolean>; result: boolean }[] = [];
@@ -49,6 +49,8 @@ export function evaluateAll(ast: AST) {
 
 		values.push({ result, variables });
 	}
+
+	allVariables = allVariables.reverse();
 
 	return {
 		values,
