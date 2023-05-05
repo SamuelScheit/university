@@ -1,4 +1,15 @@
-import { AST, SYMBOL, BINARY, UNARY, NOT, AND, OR, BinaryExpression, FALSE, TRUE } from "./Parser";
+import {
+	AST,
+	SYMBOL,
+	BINARY,
+	UNARY,
+	NOT,
+	AND,
+	OR,
+	BinaryExpression,
+	FALSE,
+	TRUE,
+} from "./Parser";
 
 export function isFalse(left: AST) {
 	return left.type === SYMBOL && left.name === FALSE;
@@ -44,10 +55,18 @@ export function markRecursiveActive(ast: AST) {
 
 export function isEqual(left: AST, right: AST): boolean {
 	if (left.type != right.type) return false;
-	if (left.type === SYMBOL && right.type === SYMBOL) return left.name === right.name;
+	if (left.type === SYMBOL && right.type === SYMBOL)
+		return left.name === right.name;
 	if (left.type === BINARY && right.type === BINARY)
-		return left.operator === right.operator && isEqual(left.left, right.left) && isEqual(left.right, right.right);
-	if (left.type === UNARY && right.type === UNARY) return left.operator === right.operator && isEqual(left.right, right.right);
+		return (
+			left.operator === right.operator &&
+			isEqual(left.left, right.left) &&
+			isEqual(left.right, right.right)
+		);
+	if (left.type === UNARY && right.type === UNARY)
+		return (
+			left.operator === right.operator && isEqual(left.right, right.right)
+		);
 
 	return false;
 }
@@ -64,7 +83,11 @@ export function isLeftNegatedLeft(left: AST, right: AST) {
 	);
 }
 
-export function isAbsorption(left: AST, right: AST, operator: typeof AND | typeof OR) {
+export function isAbsorption(
+	left: AST,
+	right: AST,
+	operator: typeof AND | typeof OR
+) {
 	// A ? (A operator ?)
 	return (
 		left.type === SYMBOL &&
@@ -75,15 +98,25 @@ export function isAbsorption(left: AST, right: AST, operator: typeof AND | typeo
 	);
 }
 
-export function isDistributive(left: AST, right: AST, operator: typeof AND | typeof OR) {
+export function isDistributive(
+	left: AST,
+	right: AST,
+	operator: typeof AND | typeof OR
+) {
 	return (
-		left.type !== BINARY && right.type === BINARY && right.operator === operator
+		left.type !== BINARY &&
+		right.type === BINARY &&
+		right.operator === operator
 		// right.right.type === "Symbol"
 		// right.left.type === "Symbol"
 	);
 }
 
-export function applyDistributive(left: AST, right: AST, operator: typeof AND | typeof OR): AST {
+export function applyDistributive(
+	left: AST,
+	right: AST,
+	operator: typeof AND | typeof OR
+): AST {
 	markRecursiveActive(left);
 	markRecursiveActive(right);
 

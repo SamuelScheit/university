@@ -10,7 +10,10 @@ export const ASTNode: React.FC<ASTNodeProps> = ({ node }) => {
 	let children: ReactNode[];
 	let content: ReactNode;
 	if (node.type === "BinaryExpression") {
-		children = [<ASTNode key="left" node={node.left} />, <ASTNode key="right" node={node.right} />];
+		children = [
+			<ASTNode key="left" node={node.left} />,
+			<ASTNode key="right" node={node.right} />,
+		];
 		content = node.operator;
 	} else if (node.type === "UnaryExpression") {
 		children = [<ASTNode key="right" node={node.right} />];
@@ -26,7 +29,10 @@ export const ASTNode: React.FC<ASTNodeProps> = ({ node }) => {
 
 	return (
 		<div className="ast-node">
-			<div className="content" style={{ background: node.active ? "#00a349" : "" }}>
+			<div
+				className="content"
+				style={{ background: node.active ? "#00a349" : "" }}
+			>
 				{content}
 			</div>
 			{children.length > 0 && <div className="children">{children}</div>}

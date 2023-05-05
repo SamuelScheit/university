@@ -22,7 +22,10 @@ export function KVDiagram({ ast }: { ast?: AST }) {
 					{vars.top.map((_, i) => {
 						var [variable, value] = VariableValue(_);
 						return (
-							<th style={{ borderBottomWidth: value ? 2 : 0 }} key={i}>
+							<th
+								style={{ borderBottomWidth: value ? 2 : 0 }}
+								key={i}
+							>
 								{value ? variable : ""}
 							</th>
 						);
@@ -37,10 +40,16 @@ export function KVDiagram({ ast }: { ast?: AST }) {
 
 					return (
 						<tr key={i}>
-							<th style={{ borderRightWidth: leftValue ? 2 : 0 }}>{leftValue ? left : ""}</th>
+							<th style={{ borderRightWidth: leftValue ? 2 : 0 }}>
+								{leftValue ? left : ""}
+							</th>
 							{vars.top.map((_, j) => {
-								var [bottom, bottomValue] = VariableValue(vars.bottom[j]);
-								var [top, topValue] = VariableValue(vars.top[j]);
+								var [bottom, bottomValue] = VariableValue(
+									vars.bottom[j]
+								);
+								var [top, topValue] = VariableValue(
+									vars.top[j]
+								);
 
 								var value = evaluate(ast, {
 									[top]: topValue,
@@ -49,10 +58,17 @@ export function KVDiagram({ ast }: { ast?: AST }) {
 									[bottom]: bottomValue,
 								});
 
-								return <td key={j} className={value ? "active" : ""} />;
+								return (
+									<td
+										key={j}
+										className={value ? "active" : ""}
+									/>
+								);
 							})}
 
-							<th style={{ borderLeftWidth: rightValue ? 2 : 0 }}>{rightValue ? right : ""}</th>
+							<th style={{ borderLeftWidth: rightValue ? 2 : 0 }}>
+								{rightValue ? right : ""}
+							</th>
 						</tr>
 					);
 				})}
@@ -63,7 +79,10 @@ export function KVDiagram({ ast }: { ast?: AST }) {
 					{vars.bottom.map((_, i) => {
 						var [variable, value] = VariableValue(_);
 						return (
-							<th style={{ borderTopWidth: value ? 2 : 0 }} key={i}>
+							<th
+								style={{ borderTopWidth: value ? 2 : 0 }}
+								key={i}
+							>
 								{value ? variable : ""}
 							</th>
 						);

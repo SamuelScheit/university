@@ -1,5 +1,20 @@
 import "missing-native-js-functions";
-import { AST, TRUE, FALSE, AND, OR, NOT, IMPLIES, IFF, XOR, SYMBOL, BINARY, UNARY, TrueSymbol, FalseSymbol } from "./Parser";
+import {
+	AST,
+	TRUE,
+	FALSE,
+	AND,
+	OR,
+	NOT,
+	IMPLIES,
+	IFF,
+	XOR,
+	SYMBOL,
+	BINARY,
+	UNARY,
+	TrueSymbol,
+	FalseSymbol,
+} from "./Parser";
 import {
 	isTrue,
 	isFalse,
@@ -25,7 +40,8 @@ function* transformOR(left: AST, right: AST) {
 	if (isFalse(right)) return left;
 
 	// A ∨ ¬A = true (trivial tautology)
-	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left)) return TrueSymbol;
+	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left))
+		return TrueSymbol;
 
 	// A ∨ (A ∨ ?) = A (idempotence)
 	if (isAbsorption(left, right, OR)) return left;
@@ -36,8 +52,10 @@ function* transformOR(left: AST, right: AST) {
 	if (isAbsorption(right, left, AND)) return right;
 
 	// A ∨ (B ∧ C) = (A ∨ B) ∧ (A ∨ C)
-	if (isDistributive(left, right, AND)) return applyDistributive(right, left, OR);
-	if (isDistributive(right, left, AND)) return applyDistributive(left, right, OR);
+	if (isDistributive(left, right, AND))
+		return applyDistributive(right, left, OR);
+	if (isDistributive(right, left, AND))
+		return applyDistributive(left, right, OR);
 }
 
 function* transformAND(left: AST, right: AST) {
@@ -60,11 +78,14 @@ function* transformAND(left: AST, right: AST) {
 	if (isAbsorption(right, left, OR)) return right;
 
 	// A ∧ ¬A = false (trivial contradiction)
-	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left)) return FalseSymbol;
+	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left))
+		return FalseSymbol;
 
 	// A ∧ (B ∨ C) = (A ∧ B) ∨ (A ∧ C)
-	if (isDistributive(left, right, OR)) return applyDistributive(right, left, AND);
-	if (isDistributive(right, left, OR)) return applyDistributive(left, right, AND);
+	if (isDistributive(left, right, OR))
+		return applyDistributive(right, left, AND);
+	if (isDistributive(right, left, OR))
+		return applyDistributive(left, right, AND);
 }
 
 function* transformIMPLIES(left: AST, right: AST) {
@@ -75,13 +96,15 @@ function* transformIMPLIES(left: AST, right: AST) {
 	if (isTrue(right)) return TrueSymbol;
 
 	// A → false = ¬A
-	if (isFalse(right)) return { type: UNARY, operator: NOT, right: left } as AST;
+	if (isFalse(right))
+		return { type: UNARY, operator: NOT, right: left } as AST;
 
 	// A → A = true
 	if (isEqual(left, right)) return TrueSymbol;
 
 	// A → ¬A = ¬A
-	if (isLeftNegatedLeft(left, right)) return { type: UNARY, operator: NOT, right: left } as AST;
+	if (isLeftNegatedLeft(left, right))
+		return { type: UNARY, operator: NOT, right: left } as AST;
 
 	// ¬A → A = A
 	if (isLeftNegatedLeft(right, left)) return right;
@@ -105,11 +128,13 @@ function* transformIFF(left: AST, right: AST) {
 	if (isEqual(left, right)) return TrueSymbol;
 
 	// A ↔ ¬A = false
-	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left)) return FalseSymbol;
+	if (isLeftNegatedLeft(left, right) || isLeftNegatedLeft(right, left))
+		return FalseSymbol;
 
 	// false ↔ A = ¬A
 	if (isFalse(left)) return { type: UNARY, operator: NOT, right } as AST;
-	if (isFalse(right)) return { type: UNARY, operator: NOT, right: left } as AST;
+	if (isFalse(right))
+		return { type: UNARY, operator: NOT, right: left } as AST;
 
 	// true ↔ A = A
 	if (isTrue(left)) return right;
@@ -205,7 +230,10 @@ function* transformNOT(right: AST) {
 	}
 }
 
-export function* transform(ast: AST, root: AST = undefined as unknown as AST): Generator<AST, AST, undefined> {
+export function* transform(
+	ast: AST,
+	root: AST = undefined as unknown as AST
+): Generator<AST, AST, undefined> {
 	if (!root) root = ast;
 	const newRoot = root === ast ? undefined : root;
 	let result: AST | undefined;
@@ -240,9 +268,12 @@ export function* transform(ast: AST, root: AST = undefined as unknown as AST): G
 
 			if (operator === AND) result = yield* transformAND(left, right);
 			else if (operator === OR) result = yield* transformOR(left, right);
-			else if (operator === IMPLIES) result = yield* transformIMPLIES(left, right);
-			else if (operator === IFF) result = yield* transformIFF(left, right);
-			else if (operator === XOR) result = yield* transformXOR(left, right);
+			else if (operator === IMPLIES)
+				result = yield* transformIMPLIES(left, right);
+			else if (operator === IFF)
+				result = yield* transformIFF(left, right);
+			else if (operator === XOR)
+				result = yield* transformXOR(left, right);
 
 			break;
 		case UNARY:

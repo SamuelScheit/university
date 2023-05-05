@@ -34,7 +34,11 @@ export const BINARY = "BinaryExpression";
 export const UNARY = "UnaryExpression";
 
 export const TrueSymbol = { type: SYMBOL, name: TRUE, active: true } as Symbol;
-export const FalseSymbol = { type: SYMBOL, name: FALSE, active: true } as Symbol;
+export const FalseSymbol = {
+	type: SYMBOL,
+	name: FALSE,
+	active: true,
+} as Symbol;
 
 export class Parser {
 	input!: string;
@@ -67,7 +71,12 @@ export class Parser {
 			if (!operator) break;
 			if (operator.precedence < precedence) break;
 			const right = this.parseTerm();
-			expression = { type: "BinaryExpression", operator: operator.name, left: expression, right };
+			expression = {
+				type: "BinaryExpression",
+				operator: operator.name,
+				left: expression,
+				right,
+			};
 		}
 		return expression;
 	}
@@ -78,7 +87,11 @@ export class Parser {
 		const nextChar = this.input[this.pos];
 		const operator = this.parseOperator();
 		if (operator) {
-			return { type: "UnaryExpression", operator: operator.name, right: this.parseTerm() };
+			return {
+				type: "UnaryExpression",
+				operator: operator.name,
+				right: this.parseTerm(),
+			};
 		} else if (nextChar === "(") {
 			this.pos++; // skip the "(" character
 			const expression = this.parseExpression();
@@ -115,7 +128,10 @@ export class Parser {
 
 	skipWhitespace(): void {
 		// Skip any whitespace characters at the current position
-		while (this.pos < this.input.length && /\s/.test(this.input[this.pos])) {
+		while (
+			this.pos < this.input.length &&
+			/\s/.test(this.input[this.pos])
+		) {
 			this.pos++;
 		}
 	}

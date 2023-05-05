@@ -22,7 +22,9 @@ export function TruthTable({ ast }: { ast?: AST }) {
 				{values.map((row, index) => (
 					<tr key={index}>
 						{variables.map((variable) => (
-							<td key={variable}>{row.variables[variable] ? "1" : "0"}</td>
+							<td key={variable}>
+								{row.variables[variable] ? "1" : "0"}
+							</td>
 						))}
 						<td className="result">{row.result ? "1" : "0"}</td>
 					</tr>

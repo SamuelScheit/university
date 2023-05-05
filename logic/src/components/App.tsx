@@ -1,7 +1,17 @@
 import React, { Component } from "react";
 import "./App.scss";
 import "mathlive";
-import { AND, AST, FALSE, IFF, IMPLIES, NOT, OR, Parser, TRUE } from "../Parser";
+import {
+	AND,
+	AST,
+	FALSE,
+	IFF,
+	IMPLIES,
+	NOT,
+	OR,
+	Parser,
+	TRUE,
+} from "../Parser";
 import { ASTNode } from "./Node";
 import { transform } from "../Transformer";
 import "../Evaluator";
@@ -30,7 +40,11 @@ export class App extends Component {
 		window.addEventListener("keydown", (e) => {
 			if (this.focused) return;
 
-			if (e.code === "Enter" || e.code === "Space" || e.code === "ArrowRight") {
+			if (
+				e.code === "Enter" ||
+				e.code === "Space" ||
+				e.code === "ArrowRight"
+			) {
 				this.next();
 			} else if (e.code === "ArrowLeft") {
 				this.previous();
@@ -72,7 +86,8 @@ export class App extends Component {
 	};
 
 	simplify = async () => {
-		if (!this.iterator) this.iterator = transform(this.state.ast, this.state.ast);
+		if (!this.iterator)
+			this.iterator = transform(this.state.ast, this.state.ast);
 
 		let next = this.iterator.next();
 		this.history.push(JSON.parse(JSON.stringify(next.value)));
@@ -124,7 +139,13 @@ export class App extends Component {
 						<button onClick={this.skip}>Skip</button>
 					</div>
 				</div>
-				<div style={{ marginTop: "1rem", overflow: "scroll", marginBottom: "3rem" }}>
+				<div
+					style={{
+						marginTop: "1rem",
+						overflow: "scroll",
+						marginBottom: "3rem",
+					}}
+				>
 					{this.state.ast && <ASTNode node={this.state.ast} />}
 					{this.state.error && <div>{this.state.error.message}</div>}
 				</div>
