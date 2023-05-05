@@ -1,0 +1,15 @@
+{
+	"name": "proto",
+	"version": "1.0.0",
+	"main": "index.js",
+	"types": "index.d.ts",
+	"license": "MIT",
+	"scripts": {
+		"build": "protoc --ts_opt server_generic --ts_out src/ --proto_path=. time.proto && tsc"
+	},
+	"devDependencies": {
+		"@protobuf-ts/plugin": "^2.9.0",
+		"typescript": "^5.0.4",
+		"@protobuf-ts/protoc": "^2.9.0"
+	}
+}
