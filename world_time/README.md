@@ -2,6 +2,9 @@
 
 An example gRPC project to display the current time in different timezones.
 
+<img width="1623" alt="image" src="https://user-images.githubusercontent.com/34555296/236493154-6c9e7379-4f91-4f78-94af-ce077c6dda2f.png">
+
+
 ## Architecture
 
 The project consists of two services:
