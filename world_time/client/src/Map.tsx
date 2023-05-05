@@ -32,7 +32,7 @@ export function Map({
 
 	return (
 		<div className="world-wrapper">
-			<svg {...props} className="world" viewBox="0 0 500 500">
+			<svg {...props} className="world" viewBox="0 0 500 230">
 				{polygon}
 			</svg>
 		</div>
