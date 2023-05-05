@@ -1,10 +1,6 @@
-name: Build DPLL
+name: Build Logic
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: workflow_dispatch
 
 permissions:
   contents: write
@@ -18,8 +14,8 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
       - name: Build
-        run: cd dpll && npm i && npm run build
+        run: cd logic && npm i && npm run build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dpll/dist # The folder the action should deploy.
+          folder: logic/dist # The folder the action should deploy.

@@ -33,7 +33,7 @@ export function Tooltip() {
 			className="tooltip"
 			style={{
 				left: tooltip.x,
-				top: tooltip.y - 20,
+				top: tooltip.y - 30,
 				opacity: tooltip.title ? 1 : 0,
 			}}
 		>

@@ -27,7 +27,7 @@ export function Map({
 
 	useLayoutEffect(() => {
 		// @ts-ignore
-		document.querySelector(`[data-timezone="${localTimezone}"]`)?.scrollIntoViewIfNeeded?.();
+		document.querySelector(`[data-timezone="${localTimezone}"]`)?.scrollIntoViewIfNeeded?.(true);
 	}, []);
 
 	return (
