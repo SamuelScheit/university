@@ -9,5 +9,4 @@ export default defineConfig({
 			transformMixedEsModules: true,
 		},
 	},
-	base: "https://time.samuelscheit.com",
 });
