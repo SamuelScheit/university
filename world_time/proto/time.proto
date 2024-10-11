@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package time;
+
+message TimeRequest {
+  string timezone = 1;
+  string local_timezone = 2;
+  int64 unix = 3;
+}
+
+message TimeResponse {
+  int64 unix_offset = 1;
+  int64 offset = 2;
+}
+
+service TimeRoutes {
+  	rpc request(TimeRequest) returns (TimeResponse) {}
+}

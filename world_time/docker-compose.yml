@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+    client:
+        image: time_client
+        build: ./client
+        ports:
+            - "3000:80"
+    server:
+        image: time_server
+        build: ./server
+        ports:
+            - "8080:8080"

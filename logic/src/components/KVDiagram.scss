@@ -1,0 +1,26 @@
+.kvdiagram {
+	align-self: center;
+	text-align: center;
+	border-spacing: 0px;
+	display: inline-table;
+
+	th,
+	td {
+		width: 30px;
+		height: 30px;
+	}
+
+	th {
+		border-color: black;
+		border-style: solid;
+		border-width: 0;
+	}
+
+	td {
+		border: 1px solid #3d3d3d;
+	}
+
+	.active {
+		background-color: #f9ff8b;
+	}
+}
